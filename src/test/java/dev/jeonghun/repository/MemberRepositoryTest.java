@@ -1,5 +1,6 @@
 package dev.jeonghun.repository;
 
+import dev.jeonghun.domain.DeleteFlag;
 import dev.jeonghun.domain.Member;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -25,20 +27,19 @@ class MemberRepositoryTest {
         Member saveMember = 멤버_저장();
         Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow(NoSuchElementException::new);
 
-        System.out.println("findMember = " + findMember);
-
         Assertions.assertThat(saveMember.getId()).isEqualTo(findMember.getId());
     }
 
     @Test
     void 멤버_삭제() {
         Member saveMember = 멤버_저장();
-        Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow(NoSuchElementException::new);
+        Member findMember = memberRepository.findById(saveMember.getId()).get();
+
         memberRepository.delete(findMember);
         em.flush();
 
-        System.out.println("saveMember.getId() = " + saveMember.getId());
-        System.out.println("memberRepository.findByIdAndDeletedIsTrue(saveMember.getId()).isEmpty() = " + memberRepository.findByIdAndDeletedIsTrue(saveMember.getId()).isEmpty());
+        Optional<Member> deleteMember = memberRepository.findByIdAndDeleted(saveMember.getId(), DeleteFlag.N);
+        Assertions.assertThat(deleteMember.isEmpty()).isTrue();
     }
 
     private Member 멤버_저장() {
