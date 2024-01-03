@@ -1,5 +1,6 @@
 package dev.jeonghun.repository;
 
+import dev.jeonghun.domain.Address;
 import dev.jeonghun.domain.DeleteFlag;
 import dev.jeonghun.domain.Member;
 import jakarta.persistence.EntityManager;
@@ -47,8 +48,10 @@ class MemberRepositoryTest {
                 .name("홍길동")
                 .phoneNumber("01012345678")
                 .email("contact@contact.com")
-                .address("아파트 1004동 1004호")
-                .zipcode("1002-2")
+                .address(Address.builder()
+                        .address("아파트 1004동 1004호")
+                        .zipcode("1002-2")
+                        .build())
                 .build();
 
         return memberRepository.save(member);

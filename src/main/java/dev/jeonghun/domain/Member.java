@@ -24,8 +24,8 @@ public class Member extends BaseEntity {
 
     private String email;
 
-    private String address;
-    private String zipcode;
+    @Embedded
+    private Address address;
 
     @Column(length = 1, nullable = false)
     @ColumnDefault("'N'")
@@ -33,11 +33,10 @@ public class Member extends BaseEntity {
     private DeleteFlag deleted = DeleteFlag.N;
 
     @Builder
-    public Member(String name, String phoneNumber, String email, String address, String zipcode) {
+    public Member(String name, String phoneNumber, String email, Address address) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.address = address;
-        this.zipcode = zipcode;
     }
 }
