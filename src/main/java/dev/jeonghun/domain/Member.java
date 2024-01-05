@@ -17,14 +17,8 @@ public class Member extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(length = 20)
-    private String phoneNumber;
-
-    @Column(length = 50)
-    private String email;
+    @Embedded
+    private Contact contact;
 
     @Embedded
     private Address address;
@@ -35,10 +29,8 @@ public class Member extends BaseEntity {
     private DeleteFlag deleted = DeleteFlag.N;
 
     @Builder
-    public Member(String name, String phoneNumber, String email, Address address) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
+    private Member(Contact contact, Address address) {
+        this.contact = contact;
         this.address = address;
     }
 }
