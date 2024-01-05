@@ -1,5 +1,6 @@
 package dev.jeonghun.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +11,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
+    @Column(length = 1000)
     private String address;
+    @Column(length = 20)
     private String zipcode;
 
     @Builder

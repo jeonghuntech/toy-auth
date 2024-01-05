@@ -20,8 +20,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(length = 20)
     private String phoneNumber;
 
+    @Column(length = 50)
     private String email;
 
     @Embedded
