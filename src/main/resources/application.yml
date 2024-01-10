@@ -1,27 +1,12 @@
+# 기본 환경 설정
 server:
   port: 80
 
-spring:
+decorator:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:test'
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-  #      path: /h2-console
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true      # 쿼리 로그 포맷 (정렬)
-        show_sql: true        # 쿼리 로그 출력
-    database-platform: org.hibernate.dialect.H2Dialect
+    p6spy:
+      enable-logging: true # 쿼리 파라미터 바인딩 로그
 
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+# 프로퍼티 설정
+my:
+  nickname: cjh

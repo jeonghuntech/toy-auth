@@ -1,0 +1,20 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: 'jdbc:h2:./local/data'
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false # 쿼리 파라미터 바인딩 로그 미사용
