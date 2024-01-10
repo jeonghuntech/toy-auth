@@ -1,5 +1,6 @@
 package dev.jeonghun.domain.department;
 
+import dev.jeonghun.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,9 +12,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString(of = {"id", "name"})
-@EqualsAndHashCode(of = {"id", "name"})
-public class Department {
+public class Department extends BaseEntity {
 
     public static final String TOP_DEPARTMENT_NAME = "TOP";
 
@@ -39,6 +38,10 @@ public class Department {
         changeParent(parent);
     }
 
+    public void addChild(Department child) {
+        child.changeParent(this);
+    }
+
     public void changeParent(Department parent) {
         removeChildFromPreviousParent();
         addChildFromNewParent(parent);
@@ -47,21 +50,20 @@ public class Department {
 
     private void removeChildFromPreviousParent() {
         if (parent != null) {
-            parent.removeChild(this);
+            parent.childs.remove(this);
         }
-    }
-
-    private void removeChild(Department child) {
-        childs.remove(child);
     }
 
     private void addChildFromNewParent(Department parent) {
         if (parent != null) {
-            parent.addChild(this);
+            parent.childs.add(this);
         }
     }
 
-    private void addChild(Department child) {
-        childs.add(child);
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "name = " + name + ")";
     }
 }

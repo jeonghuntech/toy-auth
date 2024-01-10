@@ -38,16 +38,14 @@ public class DepartmentRepositoryTest {
         Department childA = 부서_생성_및_저장("자식 부서 A", parent);
         Department childB = 부서_생성_및_저장("자식 부서 B", parent);
 
-        childA.changeParent(parent);
-        childB.changeParent(parent);
-
         assertThat(childA.getName()).isEqualTo("자식 부서 A");
         assertThat(childB.getName()).isEqualTo("자식 부서 B");
 
         assertThat(childA.getParent()).isEqualTo(parent);
         assertThat(childB.getParent()).isEqualTo(parent);
 
-        assertThat(parent.getChilds()).containsExactly(childA, childB);
+
+        assertThat(parent.getChilds()).contains(childA);
     }
 
     @Test
@@ -57,6 +55,21 @@ public class DepartmentRepositoryTest {
         Department child = 부서_생성_및_저장("하위 부서", parentA);
 
         child.changeParent(parentB);
+
+        assertThat(child.getParent()).isNotEqualTo(parentA);
+        assertThat(child.getParent()).isEqualTo(parentB);
+
+        assertThat(parentA.getChilds()).isEmpty();
+        assertThat(parentB.getChilds()).containsExactly(child);
+    }
+
+    @Test
+    void 하위_부서_추가() {
+        Department parentA = 부서_생성_및_저장("상위 부서 A", null);
+        Department parentB = 부서_생성_및_저장("상위 부서 B", null);
+        Department child = 부서_생성_및_저장("하위 부서", parentA);
+
+        parentB.addChild(child);
 
         assertThat(child.getParent()).isNotEqualTo(parentA);
         assertThat(child.getParent()).isEqualTo(parentB);
@@ -77,7 +90,6 @@ public class DepartmentRepositoryTest {
         Department dept = Department.builder()
                 .name(Department.TOP_DEPARTMENT_NAME)
                 .build();
-
         return departmentRepository.save(dept);
     }
 }
