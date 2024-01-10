@@ -27,7 +27,7 @@ public class DepartmentRepositoryTest {
                 .build();
 
         Department saveTopDept = departmentRepository.save(dept);
-        Department findDept = departmentRepository.findById(saveTopDept.getId()).get();
+        Department findDept = departmentRepository.findById(saveTopDept.getId()).orElseThrow();
 
         assertThat(findDept.getName()).isEqualTo(Department.TOP_DEPARTMENT_NAME);
     }
