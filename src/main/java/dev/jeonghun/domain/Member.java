@@ -10,7 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
+@EqualsAndHashCode // TODO lombok 적용됨, 확인필요
 @SQLDelete(sql = "UPDATE member SET deleted = 'Y' WHERE user_id = ?")
 public class Member extends BaseEntity {
     @Id
@@ -27,6 +27,7 @@ public class Member extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Department department;
 
     @Column(length = 1, nullable = false)

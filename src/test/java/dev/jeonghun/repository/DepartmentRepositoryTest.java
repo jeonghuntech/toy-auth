@@ -39,7 +39,7 @@ public class DepartmentRepositoryTest {
     }
 
     @Test
-    void 부서_멤버_목록_조회() {
+    void 부서의_멤버_목록_조회() {
         Department department = 부서_생성_및_저장("테스트 부서", null);
         Member member1 = 멤버_생성();
         Member member2 = 멤버_생성();
@@ -54,8 +54,8 @@ public class DepartmentRepositoryTest {
         em.clear();
 
         Department findDepartment = departmentRepository.findById(department.getId()).orElseThrow();
-        
-        assertThat(findDepartment.getMembers()).hasSize(2);
+
+        assertThat(findDepartment.getMembers()).contains(member1, member2);
     }
 
     @Test

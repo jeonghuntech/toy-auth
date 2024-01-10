@@ -44,10 +44,10 @@ class MemberRepositoryTest {
 
         memberRepository.delete(findMember);
         em.flush();
-
         em.clear();
 
         Optional<Member> deleteMember = memberRepository.findByIdAndDeleted(saveMember.getId(), DeleteFlag.N);
+
         assertThat(deleteMember.isEmpty()).isTrue();
     }
 
