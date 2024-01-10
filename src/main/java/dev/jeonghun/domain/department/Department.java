@@ -39,26 +39,29 @@ public class Department {
         changeParent(parent);
     }
 
-    //== 연관관계 메서드 ==/
     public void changeParent(Department parent) {
-
-        if (this.parent != null) {
-            this.parent.removeChild(this);
-        }
-
-        if (parent != null) {
-            parent.addChild(this);
-
-        }
-
+        removeChildFromPreviousParent();
+        addChildFromNewParent(parent);
         this.parent = parent;
     }
 
-    private void addChild(Department child) {
-        childs.add(child);
+    private void removeChildFromPreviousParent() {
+        if (parent != null) {
+            parent.removeChild(this);
+        }
     }
 
     private void removeChild(Department child) {
         childs.remove(child);
+    }
+
+    private void addChildFromNewParent(Department parent) {
+        if (parent != null) {
+            parent.addChild(this);
+        }
+    }
+
+    private void addChild(Department child) {
+        childs.add(child);
     }
 }
