@@ -80,14 +80,14 @@ class MemberRepositoryTest {
         assertThat(findMember.getContact()).isEqualTo(newContact);
     }
 
-    private Department 부서_저장() {
+    Department 부서_저장() {
         Department department = Department.builder()
                 .name("테스트 부서")
                 .build();
         return departmentRepository.save(department);
     }
 
-    private Member 멤버_저장() {
+    Member 멤버_저장() {
         Member member = Member.builder()
                 .contact(
                         Contact.builder()

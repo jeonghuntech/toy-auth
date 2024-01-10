@@ -1,5 +1,6 @@
 package dev.jeonghun.domain.department;
 
+import dev.jeonghun.domain.Member;
 import dev.jeonghun.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,9 @@ public class Department extends BaseEntity {
 
     @Column(length = 100, nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "department")
+    private List<Member> members = new ArrayList<>();
 
     @Setter(AccessLevel.PRIVATE)
     @ManyToOne(fetch = LAZY)

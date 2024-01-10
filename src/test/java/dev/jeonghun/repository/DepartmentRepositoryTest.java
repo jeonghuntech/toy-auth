@@ -1,5 +1,8 @@
 package dev.jeonghun.repository;
 
+import dev.jeonghun.domain.Address;
+import dev.jeonghun.domain.Contact;
+import dev.jeonghun.domain.Member;
 import dev.jeonghun.domain.department.Department;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
@@ -17,10 +20,13 @@ public class DepartmentRepositoryTest {
     DepartmentRepository departmentRepository;
 
     @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
     EntityManager em;
 
     @Test
-    void 부서_생성() {
+    void 부서_생성_및_조회() {
         Department dept = Department.builder()
                 .name(Department.TOP_DEPARTMENT_NAME)
                 .parent(최상위_부서_생성_및_저장())
@@ -30,6 +36,26 @@ public class DepartmentRepositoryTest {
         Department findDept = departmentRepository.findById(saveTopDept.getId()).orElseThrow();
 
         assertThat(findDept.getName()).isEqualTo(Department.TOP_DEPARTMENT_NAME);
+    }
+
+    @Test
+    void 부서_멤버_목록_조회() {
+        Department department = 부서_생성_및_저장("테스트 부서", null);
+        Member member1 = 멤버_생성();
+        Member member2 = 멤버_생성();
+
+        member1.changeDepartment(department);
+        member2.changeDepartment(department);
+
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        Department findDepartment = departmentRepository.findById(department.getId()).orElseThrow();
+        
+        assertThat(findDepartment.getMembers()).hasSize(2);
     }
 
     @Test
@@ -91,5 +117,21 @@ public class DepartmentRepositoryTest {
                 .name(Department.TOP_DEPARTMENT_NAME)
                 .build();
         return departmentRepository.save(dept);
+    }
+
+    Member 멤버_생성() {
+        return Member.builder()
+                .contact(
+                        Contact.builder()
+                                .name("홍길동")
+                                .phoneNumber("01012345678")
+                                .email("contact@contact.com")
+                                .build())
+                .address(
+                        Address.builder()
+                                .address("아파트 1004동 1004호")
+                                .zipcode("1002-2")
+                                .build())
+                .build();
     }
 }
