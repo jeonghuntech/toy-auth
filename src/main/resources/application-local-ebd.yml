@@ -11,4 +11,4 @@ spring:
       path: /h2-console # 경로
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create

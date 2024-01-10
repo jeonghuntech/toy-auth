@@ -4,8 +4,8 @@ import dev.jeonghun.domain.Address;
 import dev.jeonghun.domain.Contact;
 import dev.jeonghun.domain.DeleteFlag;
 import dev.jeonghun.domain.Member;
+import dev.jeonghun.domain.department.Department;
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -22,6 +24,9 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @Autowired
+    DepartmentRepository departmentRepository;
+
+    @Autowired
     EntityManager em;
 
     @Test
@@ -29,19 +34,57 @@ class MemberRepositoryTest {
         Member saveMember = 멤버_저장();
         Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow(NoSuchElementException::new);
 
-        Assertions.assertThat(saveMember.getId()).isEqualTo(findMember.getId());
+        assertThat(saveMember.getId()).isEqualTo(findMember.getId());
     }
 
     @Test
     void 멤버_삭제() {
         Member saveMember = 멤버_저장();
-        Member findMember = memberRepository.findById(saveMember.getId()).get();
+        Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow();
 
         memberRepository.delete(findMember);
         em.flush();
 
+        em.clear();
+
         Optional<Member> deleteMember = memberRepository.findByIdAndDeleted(saveMember.getId(), DeleteFlag.N);
-        Assertions.assertThat(deleteMember.isEmpty()).isTrue();
+        assertThat(deleteMember.isEmpty()).isTrue();
+    }
+
+    @Test
+    void 멤버_수정() {
+        Member saveMember = 멤버_저장();
+        Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow();
+
+        Contact contact = findMember.getContact();
+        Contact newContact = Contact.builder()
+                .name(contact.getName())
+                .phoneNumber("01022223333")
+                .email("이메일.변경@naver.com")
+                .build();
+
+        Department findDepartment = 부서_저장();
+        Department saveDepartment = departmentRepository.findById(findDepartment.getId()).orElseThrow();
+
+        findMember.changeContact(newContact);
+        findMember.changeDepartment(findDepartment);
+
+        // TODO 삭제 예정
+        em.flush();
+        em.clear();
+
+        findMember = memberRepository.findById(saveMember.getId()).orElseThrow();
+        findDepartment = departmentRepository.findById(saveDepartment.getId()).orElseThrow();
+
+        assertThat(findMember.getDepartment()).isEqualTo(findDepartment);
+        assertThat(findMember.getContact()).isEqualTo(newContact);
+    }
+
+    private Department 부서_저장() {
+        Department department = Department.builder()
+                .name("테스트 부서")
+                .build();
+        return departmentRepository.save(department);
     }
 
     private Member 멤버_저장() {

@@ -18,7 +18,7 @@ public class Department extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "deparment_id")
+    @Column(name = "department_id")
     private Long id;
 
     @Column(length = 100, nullable = false)

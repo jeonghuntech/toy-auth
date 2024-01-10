@@ -1,6 +1,7 @@
 package dev.jeonghun.domain;
 
 import dev.jeonghun.domain.common.BaseEntity;
+import dev.jeonghun.domain.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -23,6 +24,11 @@ public class Member extends BaseEntity {
     @Embedded
     private Address address;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    @ToString.Exclude
+    private Department department;
+
     @Column(length = 1, nullable = false)
     @ColumnDefault("'N'")
     @Enumerated(EnumType.STRING)
@@ -32,5 +38,13 @@ public class Member extends BaseEntity {
     private Member(Contact contact, Address address) {
         this.contact = contact;
         this.address = address;
+    }
+
+    public void changeContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public void changeDepartment(Department department) {
+        this.department = department;
     }
 }
