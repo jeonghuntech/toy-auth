@@ -64,6 +64,14 @@ public class Department extends BaseEntity {
         }
     }
 
+    public void addMember(Member member) {
+        members.add(member);
+    }
+
+    public void removeMember(Member member) {
+        members.remove(member);
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
