@@ -4,6 +4,7 @@ import dev.jeonghun.domain.Member;
 import dev.jeonghun.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Department extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String name;
 
+    @BatchSize(size = 200)
     @OneToMany(mappedBy = "department")
     private List<Member> members = new ArrayList<>();
 

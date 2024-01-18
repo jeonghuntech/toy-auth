@@ -10,3 +10,9 @@ decorator:
 # 프로퍼티 설정
 my:
   nickname: cjh
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100 #지연 로딩 최적화, 100 ~ 1000 사이로 추천

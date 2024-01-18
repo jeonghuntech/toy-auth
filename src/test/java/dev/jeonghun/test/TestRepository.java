@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -99,5 +100,61 @@ public class TestRepository {
                                 .zipcode("1002-2")
                                 .build())
                 .build();
+    }
+
+
+    @Test
+    void default_batch_fetch_size_다대일() {
+        Department department1 = 부서_생성_및_저장("부서1", null);
+        Department department2 = 부서_생성_및_저장("부서2", null);
+
+        Member member1 = memberRepository.save(멤버_생성(1));
+        Member member2 = memberRepository.save(멤버_생성(2));
+        Member member3 = memberRepository.save(멤버_생성(3));
+
+        member1.changeDepartment(department1);
+        member2.changeDepartment(department2);
+        member3.changeDepartment(department2);
+
+        em.flush();
+        em.clear();
+
+        String query = "select m from Member m join fetch m.department";
+
+        List<Member> resultList = em.createQuery(query, Member.class).getResultList();
+
+        for (Member member : resultList) {
+            System.out.println("################ member = " + member.getContact().getName() + "/" + member.getDepartment());
+        }
+    }
+
+
+    @Test
+    void default_batch_fetch_size_일대다() {
+        Department department1 = 부서_생성_및_저장("부서1", null);
+        Department department2 = 부서_생성_및_저장("부서2", null);
+
+        Member member1 = memberRepository.save(멤버_생성(1));
+        Member member2 = memberRepository.save(멤버_생성(2));
+        Member member3 = memberRepository.save(멤버_생성(3));
+
+        member1.changeDepartment(department1);
+        member2.changeDepartment(department2);
+        member3.changeDepartment(department2);
+
+        em.flush();
+        em.clear();
+
+        String query = "select d from Department d";
+
+        List<Department> resultList = em.createQuery(query, Department.class).getResultList();
+
+        for (Department department : resultList) {
+            System.out.println("############### department = " + department.getName() + "/" + department.getMembers().size());
+            for (Member member : department.getMembers()) {
+                System.out.println("member = " + member);
+            }
+        }
+        System.out.println("resultList.size() = " + resultList.size());
     }
 }
