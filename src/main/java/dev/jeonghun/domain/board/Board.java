@@ -3,10 +3,7 @@ package dev.jeonghun.domain.board;
 import dev.jeonghun.domain.DeleteFlag;
 import dev.jeonghun.domain.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
@@ -28,4 +25,10 @@ public class Board extends BaseEntity {
     @ColumnDefault("'N'")
     @Enumerated(EnumType.STRING)
     private DeleteFlag deleted = DeleteFlag.N;
+
+    @Builder
+    private Board(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
