@@ -33,7 +33,7 @@ public class TestRepository {
 
     @Test
     void 부서의_멤버_목록_조회() {
-        Department department = 부서_생성_및_저장("테스트 부서", null);
+        Department department = 부서_생성_및_저장("테스트 부서");
         Member member1 = 멤버_생성(1);
         Member member2 = 멤버_생성(2);
 
@@ -47,7 +47,7 @@ public class TestRepository {
         memberRepository.save(member1);
         memberRepository.save(member2);
 
-        department.getMembers().stream().forEach(System.out::println);
+        department.getMembers().forEach(System.out::println);
         System.out.println("department = " + department.getMembers());
         System.out.println("member1 = " + member1);
         System.out.println("member2 = " + member2);
@@ -69,7 +69,7 @@ public class TestRepository {
         memberRepository.save(member1);
         memberRepository.save(member2);
 
-        set.stream().forEach(System.out::println);
+        set.forEach(System.out::println);
         System.out.println("member1 = " + member1);
         System.out.println("member2 = " + member2);
 
@@ -78,10 +78,10 @@ public class TestRepository {
         assertThat(set).contains(member1, member2);
     }
 
-    Department 부서_생성_및_저장(String name, Department parent) {
+    Department 부서_생성_및_저장(String name) {
         Department dept = Department.builder()
                 .name(name)
-                .parent(parent)
+                .parent(null)
                 .build();
         return departmentRepository.save(dept);
     }
@@ -105,8 +105,8 @@ public class TestRepository {
 
     @Test
     void default_batch_fetch_size_다대일() {
-        Department department1 = 부서_생성_및_저장("부서1", null);
-        Department department2 = 부서_생성_및_저장("부서2", null);
+        Department department1 = 부서_생성_및_저장("부서1");
+        Department department2 = 부서_생성_및_저장("부서2");
 
         Member member1 = memberRepository.save(멤버_생성(1));
         Member member2 = memberRepository.save(멤버_생성(2));
@@ -131,8 +131,8 @@ public class TestRepository {
 
     @Test
     void default_batch_fetch_size_일대다() {
-        Department department1 = 부서_생성_및_저장("부서1", null);
-        Department department2 = 부서_생성_및_저장("부서2", null);
+        Department department1 = 부서_생성_및_저장("부서1");
+        Department department2 = 부서_생성_및_저장("부서2");
 
         Member member1 = memberRepository.save(멤버_생성(1));
         Member member2 = memberRepository.save(멤버_생성(2));
