@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -22,6 +25,10 @@ public class Board extends BaseEntity {
     @Column(length = 2000, nullable = false)
     private String content;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Comment> comments = new ArrayList<>();
+
     @Column(length = 1, nullable = false)
     @ColumnDefault("'N'")
     @Enumerated(EnumType.STRING)
@@ -31,5 +38,15 @@ public class Board extends BaseEntity {
     private Board(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.changeBoard(this);
+    }
+
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.changeBoard(null);
     }
 }
