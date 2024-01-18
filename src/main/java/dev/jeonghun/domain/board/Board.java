@@ -12,6 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 @ToString
 public class Board extends BaseEntity {
     @Id
+    @Column(name = "board_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
