@@ -20,5 +20,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             join m.department d
             where m.contact.name = :userName and d.name = :departmentName
             """)
-    List<Member> findMember(String departmentName, @Param("userName") String userName);
+    List<Member> findMember(@Param("departmentName") String departmentName, @Param("userName") String userName);
 }
