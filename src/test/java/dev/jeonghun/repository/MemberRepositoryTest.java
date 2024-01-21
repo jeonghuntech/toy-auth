@@ -131,7 +131,7 @@ class MemberRepositoryTest {
         // 벌크 연산은 영속성 반영이 안된다. 영속성 컨텍스트를 비우고 하거나 사용후에는 초기화 하자
 //        em.flush();
 //        em.clear();
-        int count = memberRepository.bulkAgePlug(5);
+        int count = memberRepository.bulkAgePlus(5);
         em.flush();
         em.clear();
 

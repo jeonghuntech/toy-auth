@@ -44,5 +44,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Modifying
     @Query("update Member m set m.age = m.age + 1 where m.age > :age")
-    int bulkAgePlug(@Param("age") int age);
+    int bulkAgePlus(@Param("age") int age);
+
+
 }
