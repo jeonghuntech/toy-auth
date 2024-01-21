@@ -122,6 +122,22 @@ class MemberRepositoryTest {
         assertThat(findMember.getContact()).isEqualTo(newContact);
     }
 
+    @Test
+    void 특정나이의_멤버의_나이를_1씩_증가시킨다() {
+        for (int i = 1; i <= 10; i++) {
+            멤버_생성_및_저장("홍길동" + i, i);
+        }
+
+        // 벌크 연산은 영속성 반영이 안된다. 영속성 컨텍스트를 비우고 하거나 사용후에는 초기화 하자
+//        em.flush();
+//        em.clear();
+        int count = memberRepository.bulkAgePlug(5);
+        em.flush();
+        em.clear();
+
+        assertThat(count).isEqualTo(5);
+    }
+
     Member 멤버_생성_및_저장(String name) {
         return 멤버_생성_및_저장(name, 0);
     }
