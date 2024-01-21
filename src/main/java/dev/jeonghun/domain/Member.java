@@ -21,6 +21,9 @@ public class Member extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
+    @Column(nullable = false)
+    private int age;
+
     @Embedded
     private Contact contact;
 
