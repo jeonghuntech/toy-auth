@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -28,16 +29,29 @@ class MemberRepositoryTest {
     EntityManager em;
 
     @Test
-    void 멤버_생성_및_조회() {
-        Member saveMember = 멤버_저장();
+    void 멤버를_생성하고_조회한다() {
+        Member saveMember = 멤버_생성_및_저장("홍길동");
         Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow(NoSuchElementException::new);
 
         assertThat(saveMember.getId()).isEqualTo(findMember.getId());
     }
 
     @Test
-    void 멤버_삭제() {
-        Member saveMember = 멤버_저장();
+    void 부서명과_이름으로_멤버를_조회한다() {
+        Department department = 부서_생성_및_저장("개발부");
+        Member member1 = 멤버_생성_및_저장("홍길동");
+        Member member2 = 멤버_생성_및_저장("강감찬");
+
+        member1.changeDepartment(department);
+        member2.changeDepartment(department);
+
+        List<Member> findMembers = memberRepository.findMember("개발부", "홍길동");
+        assertThat(findMembers).containsExactly(member1);
+    }
+
+    @Test
+    void 멤버를_삭제한다() {
+        Member saveMember = 멤버_생성_및_저장("홍길동");
         Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow();
 
         memberRepository.delete(findMember);
@@ -50,8 +64,8 @@ class MemberRepositoryTest {
     }
 
     @Test
-    void 멤버_수정() {
-        Member saveMember = 멤버_저장();
+    void 멤버를_수정한다() {
+        Member saveMember = 멤버_생성_및_저장("홍길동");
         Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow();
 
         Contact contact = findMember.getContact();
@@ -61,35 +75,27 @@ class MemberRepositoryTest {
                 .email("이메일.변경@naver.com")
                 .build();
 
-        Department findDepartment = 부서_저장();
-        Department saveDepartment = departmentRepository.findById(findDepartment.getId()).orElseThrow();
+        Department department = 부서_생성_및_저장("부서1");
 
         findMember.changeContact(newContact);
-        findMember.changeDepartment(findDepartment);
+        findMember.changeDepartment(department);
 
         // TODO 삭제 예정
         em.flush();
         em.clear();
 
         findMember = memberRepository.findById(saveMember.getId()).orElseThrow();
-        findDepartment = departmentRepository.findById(saveDepartment.getId()).orElseThrow();
+        department = departmentRepository.findById(department.getId()).orElseThrow();
 
-        assertThat(findMember.getDepartment()).isEqualTo(findDepartment);
+        assertThat(findMember.getDepartment()).isEqualTo(department);
         assertThat(findMember.getContact()).isEqualTo(newContact);
     }
 
-    Department 부서_저장() {
-        Department department = Department.builder()
-                .name("테스트 부서")
-                .build();
-        return departmentRepository.save(department);
-    }
-
-    Member 멤버_저장() {
+    Member 멤버_생성_및_저장(String name) {
         Member member = Member.builder()
                 .contact(
                         Contact.builder()
-                                .name("홍길동")
+                                .name(name)
                                 .phoneNumber("01012345678")
                                 .email("contact@contact.com")
                                 .build())
@@ -101,5 +107,13 @@ class MemberRepositoryTest {
                 .build();
 
         return memberRepository.save(member);
+    }
+
+    Department 부서_생성_및_저장(String name) {
+        Department dept = Department.builder()
+                .name(name)
+                .parent(null)
+                .build();
+        return departmentRepository.save(dept);
     }
 }
