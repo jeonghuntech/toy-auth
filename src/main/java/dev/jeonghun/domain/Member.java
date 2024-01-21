@@ -41,7 +41,8 @@ public class Member extends BaseEntity {
     private DeleteFlag deleted = DeleteFlag.N;
 
     @Builder
-    private Member(Contact contact, Address address) {
+    private Member(int age, Contact contact, Address address) {
+        this.age = age;
         this.contact = contact;
         this.address = address;
     }

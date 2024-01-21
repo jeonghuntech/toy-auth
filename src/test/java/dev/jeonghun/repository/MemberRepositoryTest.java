@@ -1,5 +1,6 @@
 package dev.jeonghun.repository;
 
+import dev.jeonghun.config.P6SpyFormatter;
 import dev.jeonghun.domain.Address;
 import dev.jeonghun.domain.Contact;
 import dev.jeonghun.domain.DeleteFlag;
@@ -9,6 +10,10 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,6 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import(P6SpyFormatter.class)
 class MemberRepositoryTest {
 
     @Autowired
@@ -47,6 +53,31 @@ class MemberRepositoryTest {
 
         List<Member> findMembers = memberRepository.findMember("개발부", "홍길동");
         assertThat(findMembers).containsExactly(member1);
+    }
+
+    @Test
+    void 나이가_5보다_큰_멤버를_조회한다() {
+
+        for (int i = 1; i <= 10; i++) {
+            멤버_생성_및_저장("홍길동" + i, i);
+        }
+
+        for (int i = 1; i <= 20; i++) {
+            멤버_생성_및_저장("홍길서" + i, i);
+        }
+
+        PageRequest pageRequest = PageRequest.of(1, 10, Sort.by(Sort.Direction.DESC, "contact.name"));
+        Page<Member> findMembers = memberRepository.findByContactNameContainsAndAgeGreaterThan("홍길", 5, pageRequest);
+
+
+        List<Member> content = findMembers.getContent();
+
+        content.forEach(System.out::println);
+
+        assertThat(content).hasSize(10);
+        assertThat(findMembers.getTotalElements()).isEqualTo(20);
+        assertThat(findMembers.getNumber()).isEqualTo(1);
+        assertThat(findMembers.getTotalPages()).isEqualTo(2);
     }
 
     @Test
@@ -92,7 +123,12 @@ class MemberRepositoryTest {
     }
 
     Member 멤버_생성_및_저장(String name) {
+        return 멤버_생성_및_저장(name, 0);
+    }
+
+    Member 멤버_생성_및_저장(String name, int age) {
         Member member = Member.builder()
+                .age(age)
                 .contact(
                         Contact.builder()
                                 .name(name)
