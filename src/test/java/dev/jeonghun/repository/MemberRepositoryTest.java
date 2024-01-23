@@ -56,7 +56,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    void 나이가_5보다_큰_멤버를_조회한다() {
+    void 나이가_5보다_크고_특정_이름을_포함하는_멤버를_조회한다() {
 
         for (int i = 1; i <= 10; i++) {
             멤버_생성_및_저장("홍길동" + i, i);
@@ -136,6 +136,17 @@ class MemberRepositoryTest {
         em.clear();
 
         assertThat(count).isEqualTo(5);
+    }
+
+    @Test
+    void 나이를_기준으로_멤버를_조회한다() {
+        for (int i = 1; i <= 10; i++) {
+            멤버_생성_및_저장("홍길동" + i, i);
+        }
+
+        List<Member> findMembers = memberRepository.findByAgeGreaterThan(5);
+
+        assertThat(findMembers).hasSize(5);
     }
 
     Member 멤버_생성_및_저장(String name) {

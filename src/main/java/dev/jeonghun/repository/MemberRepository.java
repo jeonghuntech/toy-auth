@@ -4,6 +4,7 @@ import dev.jeonghun.domain.DeleteFlag;
 import dev.jeonghun.domain.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -39,12 +40,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                     """
     )
     Page<Member> findByContactNameContainsAndAgeGreaterThan(String name, int age, Pageable pageable);
-    //    Page<Member> findByContactNameContainsAndAgeGreaterThan(String name, int age, Pageable pageable);
 
 
     @Modifying
     @Query("update Member m set m.age = m.age + 1 where m.age > :age")
     int bulkAgePlus(@Param("age") int age);
 
+
+    @EntityGraph(attributePaths = {"department"})
+    List<Member> findByAgeGreaterThan(int age);
 
 }
