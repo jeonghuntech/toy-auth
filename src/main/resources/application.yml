@@ -16,3 +16,7 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 100 #지연 로딩 최적화, 100 ~ 1000 사이로 추천
+#  data:
+#    web:
+#      pageable:
+#        one-indexed-parameters: true # 페이지 번호 1부터 시작
