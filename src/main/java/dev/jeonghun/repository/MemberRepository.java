@@ -18,29 +18,34 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByIdAndDeleted(long userId, DeleteFlag deleted);
 
-    @Query("""
-            select m
-            from Member m
-            join fetch m.department d
-            where m.contact.name = :userName and d.name = :departmentName
-            """)
+    @Query(
+            """
+                    select m
+                    from Member m
+                    join fetch m.department d
+                    where m.contact.name = :userName and d.name = :departmentName
+                    """
+    )
     List<Member> findMember(@Param("departmentName") String departmentName, @Param("userName") String userName);
 
-    @Query(value = """
-                select m
-                from Member m
-                left join fetch m.department d
-                where m.age > :age and m.contact.name like %:name%
-            """,
-            countQuery = """
-                        select count(m)
-                        from Member m
-                        where m.age > :age
-                            and m.contact.name like %:name%
+    @Query(value =
+            """
+                    select m
+                    from Member m
+                    left join fetch m.department d
+                    where m.age > :age and m.contact.name like %:name%
+                    """,
+            countQuery =
                     """
+                            select count(m)
+                            from Member m
+                            where m.age > :age
+                                and m.contact.name like %:name%
+                            """
     )
     Page<Member> findByContactNameContainsAndAgeGreaterThan(String name, int age, Pageable pageable);
 
+    Page<Member> findAllBy(Pageable pageable);
 
     @Modifying
     @Query("update Member m set m.age = m.age + 1 where m.age > :age")
