@@ -38,5 +38,6 @@ dependencies {
 }
 
 tasks.named('test') {
+	test.systemProperty("spring.profiles.active", "test")    // Test profile 설정
 	useJUnitPlatform()
 }

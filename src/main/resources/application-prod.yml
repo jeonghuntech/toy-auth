@@ -13,8 +13,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: false # 쿼리 파라미터 바인딩 로그 미사용

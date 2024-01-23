@@ -9,3 +9,12 @@ spring:
     console:
       enabled: true # 웹 콘솔 기능 활성화
       path: /h2-console # 경로
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+# 쿼리 파라미터 바인딩 로그
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
