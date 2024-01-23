@@ -1,7 +1,6 @@
 package dev.jeonghun.domain;
 
 import dev.jeonghun.domain.common.BaseEntity;
-import dev.jeonghun.domain.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

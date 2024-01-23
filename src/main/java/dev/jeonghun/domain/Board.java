@@ -1,6 +1,5 @@
-package dev.jeonghun.domain.board;
+package dev.jeonghun.domain;
 
-import dev.jeonghun.domain.DeleteFlag;
 import dev.jeonghun.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

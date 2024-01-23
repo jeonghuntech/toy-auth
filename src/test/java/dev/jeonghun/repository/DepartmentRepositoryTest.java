@@ -2,8 +2,8 @@ package dev.jeonghun.repository;
 
 import dev.jeonghun.domain.Address;
 import dev.jeonghun.domain.Contact;
+import dev.jeonghun.domain.Department;
 import dev.jeonghun.domain.Member;
-import dev.jeonghun.domain.department.Department;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

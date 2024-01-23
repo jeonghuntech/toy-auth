@@ -1,7 +1,7 @@
 package dev.jeonghun.repository;
 
-import dev.jeonghun.domain.board.Board;
-import dev.jeonghun.domain.board.Comment;
+import dev.jeonghun.domain.Board;
+import dev.jeonghun.domain.Comment;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

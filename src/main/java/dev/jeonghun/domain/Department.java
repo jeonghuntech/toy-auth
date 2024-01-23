@@ -1,6 +1,5 @@
-package dev.jeonghun.domain.department;
+package dev.jeonghun.domain;
 
-import dev.jeonghun.domain.Member;
 import dev.jeonghun.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

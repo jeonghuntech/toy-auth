@@ -1,6 +1,6 @@
 package dev.jeonghun.repository;
 
-import dev.jeonghun.domain.department.Department;
+import dev.jeonghun.domain.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
