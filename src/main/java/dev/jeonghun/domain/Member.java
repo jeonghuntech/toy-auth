@@ -39,12 +39,29 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DeleteFlag deleted = DeleteFlag.N;
 
+    @Builder(builderMethodName = "allBuilder")
+    private Member(int age, String name, String phoneNumber, String email, String addressDetail, String zipcode) {
+        this(
+                age,
+                Contact.builder()
+                        .name(name)
+                        .phoneNumber(phoneNumber)
+                        .email(email)
+                        .build(),
+                Address.builder()
+                        .zipcode(zipcode)
+                        .address(addressDetail)
+                        .build()
+        );
+    }
+
     @Builder
     private Member(int age, Contact contact, Address address) {
         this.age = age;
         this.contact = contact;
         this.address = address;
     }
+
 
     public void changeContact(Contact contact) {
         this.contact = contact;

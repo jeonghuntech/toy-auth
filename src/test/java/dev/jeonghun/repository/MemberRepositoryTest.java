@@ -1,7 +1,11 @@
 package dev.jeonghun.repository;
 
+import dev.jeonghun.common.MemberFixture;
 import dev.jeonghun.config.P6SpyFormatter;
-import dev.jeonghun.domain.*;
+import dev.jeonghun.domain.Contact;
+import dev.jeonghun.domain.DeleteFlag;
+import dev.jeonghun.domain.Department;
+import dev.jeonghun.domain.Member;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,21 +58,13 @@ class MemberRepositoryTest {
     @Test
     void 나이가_5보다_크고_특정_이름을_포함하는_멤버를_조회한다() {
 
-        for (int i = 1; i <= 10; i++) {
-            멤버_생성_및_저장("홍길동" + i, i);
-        }
-
-        for (int i = 1; i <= 20; i++) {
-            멤버_생성_및_저장("홍길서" + i, i);
-        }
+        멤버_목록_생성_및_저장("홍길동", 10);
+        멤버_목록_생성_및_저장("홍길서", 20);
 
         PageRequest pageRequest = PageRequest.of(1, 10, Sort.by(Sort.Direction.DESC, "contact.name"));
         Page<Member> findMembers = memberRepository.findByContactNameContainsAndAgeGreaterThan("홍길", 5, pageRequest);
 
-
         List<Member> content = findMembers.getContent();
-
-        content.forEach(System.out::println);
 
         assertThat(content).hasSize(10);
         assertThat(findMembers.getTotalElements()).isEqualTo(20);
@@ -120,9 +116,7 @@ class MemberRepositoryTest {
 
     @Test
     void 특정나이의_멤버의_나이를_1씩_증가시킨다() {
-        for (int i = 1; i <= 10; i++) {
-            멤버_생성_및_저장("홍길동" + i, i);
-        }
+        멤버_목록_생성_및_저장("홍길동", 10);
 
         // 벌크 연산은 영속성 반영이 안된다. 영속성 컨텍스트를 비우고 하거나 사용후에는 초기화 하자
 //        em.flush();
@@ -136,9 +130,7 @@ class MemberRepositoryTest {
 
     @Test
     void 나이를_기준으로_멤버를_조회한다() {
-        for (int i = 1; i <= 10; i++) {
-            멤버_생성_및_저장("홍길동" + i, i);
-        }
+        멤버_목록_생성_및_저장("홍길동", 10);
 
         List<Member> findMembers = memberRepository.findByAgeGreaterThan(5);
 
@@ -146,26 +138,11 @@ class MemberRepositoryTest {
     }
 
     Member 멤버_생성_및_저장(String name) {
-        return 멤버_생성_및_저장(name, 0);
+        return memberRepository.save(MemberFixture.newMember(0, name));
     }
 
-    Member 멤버_생성_및_저장(String name, int age) {
-        Member member = Member.builder()
-                .age(age)
-                .contact(
-                        Contact.builder()
-                                .name(name)
-                                .phoneNumber("01012345678")
-                                .email("contact@contact.com")
-                                .build())
-                .address(
-                        Address.builder()
-                                .address("아파트 1004동 1004호")
-                                .zipcode("1002-2")
-                                .build())
-                .build();
-
-        return memberRepository.save(member);
+    void 멤버_목록_생성_및_저장(String name, int count) {
+        memberRepository.saveAll(MemberFixture.newMemberList(name, count));
     }
 
     Department 부서_생성_및_저장(String name) {

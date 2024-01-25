@@ -1,7 +1,6 @@
 package dev.jeonghun.repository;
 
-import dev.jeonghun.domain.Address;
-import dev.jeonghun.domain.Contact;
+import dev.jeonghun.common.MemberFixture;
 import dev.jeonghun.domain.Department;
 import dev.jeonghun.domain.Member;
 import jakarta.persistence.EntityManager;
@@ -39,8 +38,8 @@ public class DepartmentRepositoryTest {
     @Test
     void 부서의_멤버_목록_조회() {
         Department department = 부서_생성_및_저장("테스트 부서", null);
-        Member member1 = 멤버_생성();
-        Member member2 = 멤버_생성();
+        Member member1 = MemberFixture.KIM.member();
+        Member member2 = MemberFixture.PARK.member();
 
         member1.changeDepartment(department);
         member2.changeDepartment(department);
@@ -115,21 +114,5 @@ public class DepartmentRepositoryTest {
                 .name(Department.TOP_DEPARTMENT_NAME)
                 .build();
         return departmentRepository.save(dept);
-    }
-
-    Member 멤버_생성() {
-        return Member.builder()
-                .contact(
-                        Contact.builder()
-                                .name("홍길동")
-                                .phoneNumber("01012345678")
-                                .email("contact@contact.com")
-                                .build())
-                .address(
-                        Address.builder()
-                                .address("아파트 1004동 1004호")
-                                .zipcode("1002-2")
-                                .build())
-                .build();
     }
 }

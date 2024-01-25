@@ -1,7 +1,6 @@
 package dev.jeonghun.test;
 
-import dev.jeonghun.domain.Address;
-import dev.jeonghun.domain.Contact;
+import dev.jeonghun.common.MemberFixture;
 import dev.jeonghun.domain.Department;
 import dev.jeonghun.domain.Member;
 import dev.jeonghun.repository.DepartmentRepository;
@@ -34,8 +33,8 @@ public class TestRepository {
     @Test
     void 부서의_멤버_목록_조회() {
         Department department = 부서_생성_및_저장("테스트 부서");
-        Member member1 = 멤버_생성(1);
-        Member member2 = 멤버_생성(2);
+        Member member1 = MemberFixture.KIM.member();
+        Member member2 = MemberFixture.LEE.member();
 
 //        member1.changeDepartment(department);
 //        member2.changeDepartment(department);
@@ -59,8 +58,8 @@ public class TestRepository {
 
     @Test
     void 부서의_멤버_목록_ad조회() {
-        Member member1 = 멤버_생성(1);
-        Member member2 = 멤버_생성(2);
+        Member member1 = MemberFixture.KIM.member();
+        Member member2 = MemberFixture.LEE.member();
 
         Collection<Member> set = new HashSet<>();
         set.add(member1);
@@ -86,20 +85,8 @@ public class TestRepository {
         return departmentRepository.save(dept);
     }
 
-    Member 멤버_생성(int index) {
-        return Member.builder()
-                .contact(
-                        Contact.builder()
-                                .name("홍길동" + index)
-                                .phoneNumber("01012345678")
-                                .email("contact@contact.com")
-                                .build())
-                .address(
-                        Address.builder()
-                                .address("아파트 1004동 1004호")
-                                .zipcode("1002-2")
-                                .build())
-                .build();
+    Member 멤버_생123(int index) {
+        return MemberFixture.newMember(1, "홍길동");
     }
 
 
@@ -108,9 +95,9 @@ public class TestRepository {
         Department department1 = 부서_생성_및_저장("부서1");
         Department department2 = 부서_생성_및_저장("부서2");
 
-        Member member1 = memberRepository.save(멤버_생성(1));
-        Member member2 = memberRepository.save(멤버_생성(2));
-        Member member3 = memberRepository.save(멤버_생성(3));
+        Member member1 = memberRepository.save(MemberFixture.KIM.member());
+        Member member2 = memberRepository.save(MemberFixture.LEE.member());
+        Member member3 = memberRepository.save(MemberFixture.PARK.member());
 
         member1.changeDepartment(department1);
         member2.changeDepartment(department2);
@@ -134,9 +121,9 @@ public class TestRepository {
         Department department1 = 부서_생성_및_저장("부서1");
         Department department2 = 부서_생성_및_저장("부서2");
 
-        Member member1 = memberRepository.save(멤버_생성(1));
-        Member member2 = memberRepository.save(멤버_생성(2));
-        Member member3 = memberRepository.save(멤버_생성(3));
+        Member member1 = memberRepository.save(MemberFixture.KIM.member());
+        Member member2 = memberRepository.save(MemberFixture.LEE.member());
+        Member member3 = memberRepository.save(MemberFixture.PARK.member());
 
         member1.changeDepartment(department1);
         member2.changeDepartment(department2);
