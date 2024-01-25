@@ -17,6 +17,9 @@ public class Department extends BaseEntity {
 
     public static final String TOP_DEPARTMENT_NAME = "TOP";
 
+    @Transient
+    public static final Department EMPTY = null;
+
     @Id
     @GeneratedValue
     @Column(name = "department_id")
