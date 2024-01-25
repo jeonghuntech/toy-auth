@@ -1,8 +1,8 @@
 package dev.jeonghun.test;
 
-import dev.jeonghun.common.MemberFixture;
 import dev.jeonghun.domain.Department;
 import dev.jeonghun.domain.Member;
+import dev.jeonghun.domain.MemberFixture;
 import dev.jeonghun.repository.DepartmentRepository;
 import dev.jeonghun.repository.MemberRepository;
 import jakarta.persistence.EntityManager;

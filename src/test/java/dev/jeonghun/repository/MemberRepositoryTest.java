@@ -1,11 +1,7 @@
 package dev.jeonghun.repository;
 
-import dev.jeonghun.common.MemberFixture;
 import dev.jeonghun.config.P6SpyFormatter;
-import dev.jeonghun.domain.Contact;
-import dev.jeonghun.domain.DeleteFlag;
-import dev.jeonghun.domain.Department;
-import dev.jeonghun.domain.Member;
+import dev.jeonghun.domain.*;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,4 @@
-package dev.jeonghun.common;
-
-import dev.jeonghun.domain.Member;
+package dev.jeonghun.domain;
 
 import java.util.List;
 import java.util.stream.IntStream;
