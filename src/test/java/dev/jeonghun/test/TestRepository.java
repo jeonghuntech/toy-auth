@@ -86,10 +86,6 @@ public class TestRepository {
 		return departmentRepository.save(dept);
 	}
 
-	Member 멤버_생123(int index) {
-		return MemberFixture.newMember(1, "홍길동");
-	}
-
 	@Test
 	void default_batch_fetch_size_다대일() {
 		Department department1 = 부서_생성_및_저장("부서1");
