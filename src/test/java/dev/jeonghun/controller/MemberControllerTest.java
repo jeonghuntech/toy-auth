@@ -11,20 +11,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import dev.jeonghun.domain.MemberFixture;
+import dev.jeonghun.marker.RestAssuredTest;
 import dev.jeonghun.service.MemberService;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
-class MemberControllerTest extends RestTest {
+@RestAssuredTest
+class MemberControllerTest {
 
 	@Autowired
 	MemberService memberService;
 
 	@BeforeEach
 	void setup() {
-		super.setUp();
+		멤버_목록_저장();
+	}
 
+	void 멤버_목록_저장() {
 		memberService.saveAll(Arrays.asList(
 			MemberFixture.KIM.member(),
 			MemberFixture.LEE.member(),
@@ -45,7 +49,8 @@ class MemberControllerTest extends RestTest {
 		List<String> expectedList = Stream.of(
 				MemberFixture.CHOI.member(),
 				MemberFixture.PARK.member(),
-				MemberFixture.LEE.member())
+				MemberFixture.LEE.member()
+			)
 			.map(member -> member.getContact().getName())
 			.toList();
 
