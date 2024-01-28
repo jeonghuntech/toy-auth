@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import dev.jeonghun.domain.Member;
 import dev.jeonghun.domain.dto.MemberDto;
+import dev.jeonghun.domain.dto.PageDto;
 import dev.jeonghun.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 
@@ -21,9 +22,10 @@ public class MemberService {
 		this.memberRepository = memberRepository;
 	}
 
-	public Page<MemberDto> findAllMembers(Pageable pageable) {
-		return memberRepository.findAllBy(pageable)
+	public PageDto<MemberDto> findAllMembers(Pageable pageable) {
+		Page<MemberDto> findMembers = memberRepository.findAllBy(pageable)
 			.map(MemberDto::new);
+		return new PageDto<>(findMembers);
 	}
 
 	public void save(Member member) {
