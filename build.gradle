@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.1'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'com.epages.restdocs-api-spec' version '0.18.2'
 }
 
 group = 'dev.jeonghun'
@@ -25,18 +26,47 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	// Query Log
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
 
 	runtimeOnly 'com.h2database:h2'
 
 	compileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 	testImplementation 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// Rest Test
 	testImplementation 'io.rest-assured:rest-assured:5.4.0'
+
+	// Rest Docs
+	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
+	testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
 }
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+openapi3 {
+	server = 'http://localhost:80'
+	title = 'My API'
+	description = 'My API description'
+//    tagDescriptionsPropertiesFile = 'src/docs/tag-descriptions.yaml'
+	version = '0.1.0'
+	format = 'yaml'
+}
+
+
+test {
+	outputs.dir snippetsDir
+}
+
 
 tasks.named('test') {
 	test.systemProperty("spring.profiles.active", "test")    // Test profile 설정
